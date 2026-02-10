@@ -220,6 +220,7 @@ if st.button("Predict Calorie Burn Category", type="primary"):
         st.write("Debug - Input Data Columns:")
         st.write(input_df.columns.tolist())
 
+
 # Sidebar
 with st.sidebar:
     st.header("About")
