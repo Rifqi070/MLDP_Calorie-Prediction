@@ -2,6 +2,10 @@ import streamlit as st
 import pandas as pd
 import joblib
 import numpy as np
+import sklearn
+
+# Check sklearn version
+st.sidebar.write(f"scikit-learn version: {sklearn.__version__}")
 
 # Set page config
 st.set_page_config(
@@ -13,13 +17,24 @@ st.set_page_config(
 # Load Model
 @st.cache_resource
 def load_model():
-    model = joblib.load('burns_calories_model.pkl')
-    return model
+    try:
+        # Try loading with joblib
+        model = joblib.load('burns_calories_model.pkl')
+        return model
+    except Exception as e:
+        st.error(f"Error loading model with joblib: {e}")
+        # Try alternative loading method
+        import pickle
+        with open('burns_calories_model.pkl', 'rb') as f:
+            model = pickle.load(f)
+        return model
 
 try:
     model = load_model()
+    st.success("Model loaded successfully!")
 except Exception as e:
     st.error(f"Error loading model: {e}")
+    st.error("Please ensure 'burns_calories_model.pkl' is in the repository and was trained with scikit-learn 1.5.2")
     st.stop()
 
 # Title and Intro
